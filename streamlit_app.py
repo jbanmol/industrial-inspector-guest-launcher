@@ -13,15 +13,18 @@ from bootstrap import load_runtime, state
 
 def prepare():
     try:
+        print("Inspector guest: restoring pinned runtime", flush=True)
         loaded = load_runtime()
         if loaded is None:
             state["phase"] = "credential_unavailable"
+            print("Inspector guest: credential unavailable at runtime", flush=True)
             return
         runtime_directory, source = loaded
         sys.path.insert(0, str(source))
         from api_proxy import create_proxy
         from cloud_runtime import runtime
 
+        print("Inspector guest: private archive verified; starting detector", flush=True)
         runtime.start("")
         state.update(source=source, directory=runtime_directory, runtime=runtime, proxy=create_proxy(runtime))
     except Exception as error:
@@ -56,6 +59,7 @@ class HealthAlias:
 
 @asynccontextmanager
 async def lifespan(application):
+    print("Inspector guest: Streamlit server lifespan started", flush=True)
     Thread(target=prepare, daemon=True).start()
     try:
         yield
