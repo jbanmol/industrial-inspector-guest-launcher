@@ -11,9 +11,9 @@ from tempfile import TemporaryDirectory
 import httpx
 
 REPO = "jbanmol/inspector-streamlit-preflight-20261103"
-REVISION = "343ddedcc60961fbae62a4c990dc097039d4b420"
-ARCHIVE_BYTES = 199_322_756
-ARCHIVE_DIGEST = "sha256:4fe122111df8fe86e0c6556033e86346c875a70acca794bfca9488c2ec85cadc"
+REVISION = "f388424aad38f136afdfe7033e61f7aa3911cbc1"
+ARCHIVE_BYTES = 199_323_482
+ARCHIVE_DIGEST = "sha256:ecc6ae858ea07d22f65d17d03437fc425172fc41d2e074171e318593e13d7122"
 ORIGIN = "https://industrial-inspector-guest-jbanmol.streamlit.app"
 state = {"phase": "restoring"}
 
