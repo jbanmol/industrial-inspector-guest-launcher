@@ -11,7 +11,8 @@ import httpx
 
 REPO = "jbanmol/inspector-streamlit-preflight-20261103"
 REVISION = "8b7c5af89a44caa751f326deebdb9cd2d7a9e42e"
-MAX_BYTES = 350_000_000
+ARCHIVE_BYTES = 199_322_227
+ARCHIVE_DIGEST = "sha256:315cc5ce0ded0b7d5565ba92b12441adba61ec88232a41b65407f9de30a8db8a"
 ORIGIN = "https://industrial-inspector-guest-jbanmol.streamlit.app"
 
 
@@ -36,7 +37,7 @@ def load_runtime():
                 raise ValueError("Unexpected private release")
             asset = assets[0]
             size, digest = asset["size"], asset["digest"]
-            if not 0 < size <= MAX_BYTES or not digest.startswith("sha256:"):
+            if size != ARCHIVE_BYTES or digest != ARCHIVE_DIGEST:
                 raise ValueError("Invalid private release metadata")
             seen = 0
             fingerprint = hashlib.sha256()
