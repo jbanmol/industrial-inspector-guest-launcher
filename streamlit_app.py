@@ -51,11 +51,8 @@ async def proxy(request):
     except Exception as error:
         print(f"Inspector guest API {request.method} failed ({type(error).__name__})", flush=True)
         raise
-    print(
-        f"Inspector guest API {request.method} returned {response.status_code} "
-        f"(session header present: {'x-inspector-session' in request.headers})",
-        flush=True,
-    )
+    if request.url.path in {"/api/guest-session", "/api/guest-relay"}:
+        print(f"Inspector guest API {request.url.path} returned {response.status_code}", flush=True)
     return response
 
 
