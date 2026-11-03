@@ -4,16 +4,28 @@ from contextlib import asynccontextmanager
 import sys
 
 import streamlit as st
+from starlette.responses import JSONResponse
+from starlette.routing import Route
 
 from bootstrap import load_runtime
 
+failure = None
 try:
     loaded = load_runtime()
 except Exception as error:
-    print(f"Inspector guest setup failed ({type(error).__name__})", flush=True)
+    failure = type(error).__name__
+    print(f"Inspector guest setup failed ({failure})", flush=True)
     loaded = None
 
-routes = []
+async def setup_status(request):
+    return JSONResponse(
+        {"models_connected": False, "phase": "setup_failed" if failure else "credential_unavailable",
+         "failure_type": failure},
+        headers={"Cache-Control": "no-store"},
+    )
+
+
+routes = [Route("/api/hosting-status", setup_status)]
 if loaded is not None:
     runtime_directory, source = loaded
     sys.path.insert(0, str(source))

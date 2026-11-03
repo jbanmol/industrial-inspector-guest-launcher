@@ -3,6 +3,7 @@
 from functools import lru_cache
 import hashlib
 import os
+import platform
 from pathlib import Path
 import tarfile
 from tempfile import TemporaryDirectory
@@ -22,7 +23,15 @@ def load_runtime():
         raise ValueError("The guest app cannot use a private review database")
     token = os.environ.get("INSPECTOR_REPO_READ_TOKEN")
     if not token:
+        import streamlit as st
+        try:
+            token = st.secrets.get("INSPECTOR_REPO_READ_TOKEN")
+        except FileNotFoundError:
+            return None
+    if not token:
         return None
+    if platform.system() != "Linux":
+        raise RuntimeError("Restore the private Inspector runtime on hosted Linux only")
     os.environ["INSPECTOR_GUEST_ORIGIN"] = ORIGIN
     root = TemporaryDirectory(prefix="inspector-private-runtime-")
     work = Path(root.name)
