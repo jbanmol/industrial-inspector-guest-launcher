@@ -46,7 +46,17 @@ async def proxy(request):
     handler = state.get("proxy")
     if handler is None:
         return JSONResponse({"detail": "The Inspector guest runtime is preparing"}, status_code=503)
-    return await handler(request)
+    try:
+        response = await handler(request)
+    except Exception as error:
+        print(f"Inspector guest API {request.method} failed ({type(error).__name__})", flush=True)
+        raise
+    print(
+        f"Inspector guest API {request.method} returned {response.status_code} "
+        f"(session cookie present: {'__Host-inspector-guest' in request.cookies})",
+        flush=True,
+    )
+    return response
 
 
 class HealthAlias:
