@@ -53,7 +53,7 @@ async def proxy(request):
         raise
     print(
         f"Inspector guest API {request.method} returned {response.status_code} "
-        f"(session cookie present: {'__Host-inspector-guest' in request.cookies})",
+        f"(session header present: {'x-inspector-session' in request.headers})",
         flush=True,
     )
     return response
