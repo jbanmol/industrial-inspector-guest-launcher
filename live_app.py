@@ -4,7 +4,12 @@ import runpy
 
 import streamlit as st
 
-from streamlit_app import loaded
+from bootstrap import load_runtime
+
+try:
+    loaded = load_runtime()
+except Exception:
+    loaded = None
 
 if loaded is None:
     st.title("Industrial Visual Defect Inspector")

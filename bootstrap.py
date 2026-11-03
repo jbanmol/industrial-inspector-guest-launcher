@@ -1,5 +1,6 @@
 """Load the pinned private Inspector release on the guest host only."""
 
+from functools import lru_cache
 import hashlib
 import os
 from pathlib import Path
@@ -14,6 +15,7 @@ MAX_BYTES = 350_000_000
 ORIGIN = "https://industrial-inspector-guest-jbanmol.streamlit.app"
 
 
+@lru_cache(maxsize=1)
 def load_runtime():
     if os.environ.get("INSPECTOR_DATABASE_URL"):
         raise ValueError("The guest app cannot use a private review database")
