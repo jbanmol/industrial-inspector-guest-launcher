@@ -15,6 +15,7 @@ REVISION = "8b7c5af89a44caa751f326deebdb9cd2d7a9e42e"
 ARCHIVE_BYTES = 199_322_227
 ARCHIVE_DIGEST = "sha256:315cc5ce0ded0b7d5565ba92b12441adba61ec88232a41b65407f9de30a8db8a"
 ORIGIN = "https://industrial-inspector-guest-jbanmol.streamlit.app"
+state = {"phase": "restoring"}
 
 
 @lru_cache(maxsize=1)

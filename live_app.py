@@ -1,18 +1,24 @@
-"""Delegate the visible page to the private Inspector application."""
+"""Show setup progress, then delegate to the private Inspector interface."""
 
 import runpy
 
 import streamlit as st
 
-from bootstrap import load_runtime
+from bootstrap import state
 
-try:
-    loaded = load_runtime()
-except Exception:
-    loaded = None
 
-if loaded is None:
-    st.title("Industrial Visual Defect Inspector")
-    st.info("The guest workspace is awaiting its private runtime connection.")
+if "source" in state:
+    runpy.run_path(str(state["source"] / "live_app.py"), run_name="__main__")
 else:
-    runpy.run_path(str(loaded[1] / "live_app.py"), run_name="__main__")
+    st.title("Industrial Visual Defect Inspector")
+
+    @st.fragment(run_every=5)
+    def wait_for_runtime():
+        if "source" in state:
+            st.rerun(scope="app")
+        if state["phase"] in {"setup_failed", "credential_unavailable"}:
+            st.info("The guest workspace is awaiting its private runtime connection.")
+        else:
+            st.info("The Inspector is starting. This page will refresh automatically.")
+
+    wait_for_runtime()
